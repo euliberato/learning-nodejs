@@ -1,0 +1,16 @@
+Na segunda aula, aprendi a criar um projeto em Node
+com o comando: npm init -y
+
+Apos criar a pasta src do projeto e iniciar o Node
+o comando: npm install express --save
+irá instalar o express em meu projeto 
+
+Dentro da pasta src, irá ficar meu projeto
+e assim posso inicializa-lo com o comando: node {nome_arquivo}.js
+
+Para fazer o projeto ser reativo, basta instalar o nodemon
+com: npm install nodemon -d (na raiz do projeto)
+e definir no package.json, em scripts, o comando:
+"dev": "nodemon src/app.js"
+
+e agora basta iniciar o projeto com: npm run dev

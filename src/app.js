@@ -1,23 +1,49 @@
-const express = require('express')
+import express from 'express'
+
 const app = express()
-const port = 3000
 
-//Acima, foi criado uma requisição do express
-//Essa requisição será usada para criar uma instância
-//Instância essa que será guardada em app
-//E logo apos isso, será definida uma porta para o projeto
+app.use(express.json())
 
+//Mock de dados fictícios
+const selecoes = [
+    {id: 1, selecao: 'Brasil', grupo: 'G'},
+    {id: 2, selecao: 'Suiça', grupo: 'G'},
+    {id: 3, selecao: 'Camarões', grupo: 'G'},
+    {id: 4, selecao: 'Sérvia', grupo: 'G'},
+    
+]
+
+//Abaixo: funções auxiliares
+function buscarSelecaoPorId(id) {
+    return selecoes.filter( selecao => selecao.id == id)
+}
+
+function buscaIndexSelecao(id) {
+    return selecoes.findIndex( selecao => selecao.id == id )
+}
+
+//Rotas da API
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.send('Curso de Node JS!')
 })
 
-//A rota home, irá fazer uma requisição
-//Essa requisição deve ter uma resposta
-//Requisição e resposta, ambas passadas por parâmetro
-//E a arrow-function retorna uma resposta
-
-app.listen(port, () => {
-    console.log(`Servidor rodando no endereço http://localhost:${port}`)
+app.get('/selecoes', (req, res)=> {
+   res.send(selecoes)
 })
 
-//Escutar a chamada que será feita para uma porta
+app.get('/selecoes/:id', (req, res) => {
+    res.json(buscarSelecaoPorId(req.params.id))
+})
+
+app.post('/selecoes', (req, res) => {
+    selecoes.push(req.body)
+    res.status(201).send('Seleção cadastrada com sucesso!')
+})
+
+app.delete('/selecoes/:id', (req, res) => {
+    let index = buscaIndexSelecao(req.params.id)
+    selecoes.splice(index, 1)
+    res.send(`Seleção ID: ${req.params.id} excluída com sucesso!`)
+})
+
+export default app

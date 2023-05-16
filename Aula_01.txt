@@ -1,0 +1,10 @@
+Na primeira aula, foi visto um passo a passo
+breve de como instalar a ferramenta e dependências
+necessárias
+
+Outras ferramentas necessárias: insomnia ou postman
+para testar as API's
+
+site de download do NodeJS: https://nodejs.org/en
+site de download do ExpressJS: https://expressjs.com/
+
