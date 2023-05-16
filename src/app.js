@@ -1,5 +1,4 @@
 import express from 'express'
-
 const app = express()
 
 app.use(express.json())
@@ -44,6 +43,14 @@ app.delete('/selecoes/:id', (req, res) => {
     let index = buscaIndexSelecao(req.params.id)
     selecoes.splice(index, 1)
     res.send(`Seleção ID: ${req.params.id} excluída com sucesso!`)
+})
+
+app.put('/selecoes/:id', (req, res) => {
+    let index = buscaIndexSelecao(req.params.id)
+    selecoes[index].selecao = req.body.selecao
+    selecoes[index].grupo = req.body.grupo
+    res.json(selecoes)
+    res.send(`Seleção ID: ${req.params.id} atualizada com sucesso!`)
 })
 
 export default app
