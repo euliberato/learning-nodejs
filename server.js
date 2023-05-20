@@ -3,8 +3,18 @@
 
 import app from './src/app.js'
 
+import conexao from './infra/conexao.js'
+
 const port = 3000
 
-app.listen(port, () => {
-    console.log(`Servidor rodando no endereço http://localhost:${port}`)
+conexao.connect((erro) => {
+    if(erro) {
+        console.log('Conexão falhou!')
+    } else {
+        console.log('Conexão funcionou!')
+        app.listen(port, () => {
+            console.log(`Servidor rodando no endereço http://localhost:${port}`)
+        })        
+    }
 })
+

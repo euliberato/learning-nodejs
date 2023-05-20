@@ -4,7 +4,7 @@ const app = express()
 app.use(express.json())
 
 //Mock de dados fictícios
-const selecoes = [
+const usuarios = [
     {id: 1, selecao: 'Brasil', grupo: 'G'},
     {id: 2, selecao: 'Suiça', grupo: 'G'},
     {id: 3, selecao: 'Camarões', grupo: 'G'},
@@ -13,12 +13,12 @@ const selecoes = [
 ]
 
 //Abaixo: funções auxiliares
-function buscarSelecaoPorId(id) {
-    return selecoes.filter( selecao => selecao.id == id)
+function buscarUsuarioPorId(id) {
+    return usuarios.filter( selecao => selecao.id == id)
 }
 
-function buscaIndexSelecao(id) {
-    return selecoes.findIndex( selecao => selecao.id == id )
+function buscaIndexUsuario(id) {
+    return usuarios.findIndex( selecao => selecao.id == id )
 }
 
 //Rotas da API
@@ -26,31 +26,32 @@ app.get('/', (req, res) => {
     res.send('Curso de Node JS!')
 })
 
-app.get('/selecoes', (req, res)=> {
-   res.send(selecoes)
+app.get('/usuarios', (req, res)=> {
+   res.send(usuarios)
 })
 
-app.get('/selecoes/:id', (req, res) => {
-    res.json(buscarSelecaoPorId(req.params.id))
+app.get('/usuarios/:id', (req, res) => {
+    res.json(buscarUsuarioPorId(req.params.id))
 })
 
-app.post('/selecoes', (req, res) => {
-    selecoes.push(req.body)
-    res.status(201).send('Seleção cadastrada com sucesso!')
+app.post('/usuarios', (req, res) => {
+    usuarios.push(req.body)
+    res.status(201).send('Usuário cadastrado com sucesso!')
 })
 
-app.delete('/selecoes/:id', (req, res) => {
-    let index = buscaIndexSelecao(req.params.id)
-    selecoes.splice(index, 1)
-    res.send(`Seleção ID: ${req.params.id} excluída com sucesso!`)
+app.delete('/usuarios/:id', (req, res) => {
+    let index = buscaIndexUsuario(req.params.id)
+    usuarios.splice(index, 1)
+    res.send(`Usuário ID: ${req.params.id} excluído com sucesso!`)
 })
 
-app.put('/selecoes/:id', (req, res) => {
-    let index = buscaIndexSelecao(req.params.id)
-    selecoes[index].selecao = req.body.selecao
-    selecoes[index].grupo = req.body.grupo
-    res.json(selecoes)
-    res.send(`Seleção ID: ${req.params.id} atualizada com sucesso!`)
+app.put('/usuarios/:id', (req, res) => {
+    let index = buscaIndexUsuario(req.params.id)
+    usuarios[index].nome = req.body.nome
+    usuarios[index].cpf = req.body.cpf
+    usuarios[index].cargo = req.body.cargo
+    res.json(usuarios)
+    res.send(`Usuário ID: ${req.params.id} atualizado com sucesso!`)
 })
 
 export default app
