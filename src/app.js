@@ -1,16 +1,9 @@
 import express from 'express'
+import conexao from '../infra/conexao.js'
+
 const app = express()
 
 app.use(express.json())
-
-//Mock de dados fictícios
-const usuarios = [
-    {id: 1, selecao: 'Brasil', grupo: 'G'},
-    {id: 2, selecao: 'Suiça', grupo: 'G'},
-    {id: 3, selecao: 'Camarões', grupo: 'G'},
-    {id: 4, selecao: 'Sérvia', grupo: 'G'},
-    
-]
 
 //Abaixo: funções auxiliares
 function buscarUsuarioPorId(id) {
@@ -21,37 +14,70 @@ function buscaIndexUsuario(id) {
     return usuarios.findIndex( selecao => selecao.id == id )
 }
 
-//Rotas da API
-app.get('/', (req, res) => {
-    res.send('Curso de Node JS!')
-})
-
+//Rotas
 app.get('/usuarios', (req, res)=> {
-   res.send(usuarios)
+   const sql = "SELECT * FROM tabela_usuarios;"
+   conexao.query(sql, (erro, resultado) => {
+        if(erro) {
+            console.log(erro)
+            res.status(404).json({ 'erro': erro })
+        } else {
+            res.status(200).json(resultado)
+        }
+   })
 })
 
 app.get('/usuarios/:id', (req, res) => {
-    res.json(buscarUsuarioPorId(req.params.id))
+    const id = req.params.id
+    const sql = "SELECT * FROM tabela_usuarios WHERE id=?;"
+    conexao.query(sql, id, (erro, resultado) => {
+        const linha = resultado[0]
+        if(erro) {
+            console.log(erro)
+            res.status(404).json({ 'erro': erro })
+        } else {
+            res.status(200).json(linha)
+        }
+    })
 })
 
 app.post('/usuarios', (req, res) => {
-    usuarios.push(req.body)
-    res.status(201).send('Usuário cadastrado com sucesso!')
+    const usuario = req.body
+    const sql = "INSERT INTO tabela_usuarios SET ?;"
+    conexao.query(sql, usuario, (erro, resultado) => {
+        if(erro) {
+            console.log(erro)
+            res.status(400).json({ 'erro': erro })
+        } else {
+            res.status(201).json(resultado)
+        }
+    })
 })
 
 app.delete('/usuarios/:id', (req, res) => {
-    let index = buscaIndexUsuario(req.params.id)
-    usuarios.splice(index, 1)
-    res.send(`Usuário ID: ${req.params.id} excluído com sucesso!`)
+    const id = req.params.id
+    const sql = "DELETE FROM tabela_usuarios WHERE id=?;"
+    conexao.query(sql, id, (erro, resultado) => {
+        if(erro) {
+            res.status(404).json({ 'erro': erro })
+        } else {
+            res.status(200).json(resultado)
+        }
+    })
 })
 
 app.put('/usuarios/:id', (req, res) => {
-    let index = buscaIndexUsuario(req.params.id)
-    usuarios[index].nome = req.body.nome
-    usuarios[index].cpf = req.body.cpf
-    usuarios[index].cargo = req.body.cargo
-    res.json(usuarios)
-    res.send(`Usuário ID: ${req.params.id} atualizado com sucesso!`)
+    const id = req.params.id
+    const usuario = req.body
+    const sql = "UPDATE tabela_usuarios SET ? WHERE id=?;"
+    conexao.query(sql, [usuario, id], (erro, resultado) => {
+        if(erro) {
+            console.log(erro)
+            res.status(400).json({ 'erro': erro })
+        } else {
+            res.status(200).json(resultado)
+        }
+    })
 })
 
 export default app
