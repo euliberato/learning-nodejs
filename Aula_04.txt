@@ -1,2 +1,0 @@
-Criando rotas GET com parâmetros no ExpressJS
-e também criando a rota delete.
