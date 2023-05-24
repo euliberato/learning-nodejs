@@ -1,70 +1,35 @@
-import conexao from "../database/conexao.js"
+import UsuarioRepository from "../repositories/UsuarioRepository.js"
 
 class UsuarioController {
 
     async index(req, res){
-        const sql = "SELECT * FROM tabela_usuarios;"
-        conexao.query(sql, (erro, resultado) => {
-             if(erro) {
-                 console.log(erro)
-                 res.status(404).json({ 'erro': erro })
-             } else {
-                 res.status(200).json(resultado)
-             }
-        })
+        const result = await UsuarioRepository.findAll()
+        res.json(result)
     }
 
-    show(req, res){
+    async show(req, res){
         const id = req.params.id
-        const sql = "SELECT * FROM tabela_usuarios WHERE id=?;"
-        conexao.query(sql, id, (erro, resultado) => {
-            const linha = resultado[0]
-            if(erro) {
-                console.log(erro)
-                res.status(404).json({ 'erro': erro })
-            } else {
-                res.status(200).json(linha)
-            }
-        })
+        const result = await UsuarioRepository.findById(id)
+        res.json(result)
     }  
 
-    store(req, res){
+    async store(req, res){
         const usuario = req.body
-        const sql = "INSERT INTO tabela_usuarios SET ?;"
-        conexao.query(sql, usuario, (erro, resultado) => {
-            if(erro) {
-                console.log(erro)
-                res.status(400).json({ 'erro': erro })
-            } else {
-                res.status(201).json(resultado)
-            }
-        })
+        const result = await UsuarioRepository.create(usuario)
+        res.json(result)
     }   
 
-    update(req, res){
+    async update(req, res){
         const id = req.params.id
         const usuario = req.body
-        const sql = "UPDATE tabela_usuarios SET ? WHERE id=?;"
-        conexao.query(sql, [usuario, id], (erro, resultado) => {
-            if(erro) {
-                console.log(erro)
-                res.status(400).json({ 'erro': erro })
-            } else {
-                res.status(200).json(resultado)
-            }
-        })
+        const result = await UsuarioRepository.update(usuario, id)
+        res.json(result)
     }
 
-    delete(req, res){
+    async delete(req, res){
         const id = req.params.id
-        const sql = "DELETE FROM tabela_usuarios WHERE id=?;"
-        conexao.query(sql, id, (erro, resultado) => {
-            if(erro) {
-                res.status(404).json({ 'erro': erro })
-            } else {
-                res.status(200).json(resultado)
-            }
-        })
+        const result = await UsuarioRepository.delete(id)
+        res.json(result)
     }
 
 }
