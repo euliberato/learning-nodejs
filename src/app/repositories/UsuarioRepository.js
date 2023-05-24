@@ -1,60 +1,30 @@
-import conexao from "../database/conexao.js"
+import { consulta } from "../database/conexao.js"
 
 class UsuarioRepository {
 
     create(usuario) {
         const sql = "INSERT INTO tabela_usuarios SET ?;"
-        return new Promise((resolve, reject) => {
-            conexao.query(sql, usuario, (erro, resultado) => {
-                if(erro) return reject("Não foi possível cadastrar")
-                const row = JSON.parse(JSON.stringify(resultado))
-                return resolve(row)
-            })
-        })
+        return consulta(sql, usuario, "Não foi possível criar um novo usuário")
     }
 
     findAll() {
         const sql = "SELECT * FROM tabela_usuarios;"
-        return new Promise((resolve, reject) => {
-            conexao.query(sql, (erro, resultado) => {
-                if(erro) return reject("Não foi possível localizar")
-                const row = JSON.parse(JSON.stringify(resultado))
-                return resolve(row)
-            })
-        })
+        return consulta(sql, "Não foi possível encontrar usuários")
     }
 
     findById(id) {
         const sql = "SELECT * FROM tabela_usuarios WHERE id=?;"
-        return new Promise((resolve, reject) => {
-            conexao.query(sql, id, (erro, resultado) => {
-                if(erro) return reject("Não foi possível localizar")
-                const row = JSON.parse(JSON.stringify(resultado))
-                return resolve(row)
-            })
-        })
+        return consulta(sql, id, "Não foi possível encontrar o usuário especificado")
     }
 
     update(usuario, id) {
         const sql = "UPDATE tabela_usuarios SET ? WHERE id=?;"
-        return new Promise((resolve, reject) => {
-            conexao.query(sql, [usuario, id], (erro, resultado) => {
-                if(erro) return reject("Não foi possível atualizar")
-                const row = JSON.parse(JSON.stringify(resultado))
-                return resolve(row)
-            })
-        })
+        return consulta(sql, [usuario, id], "Não foi possível atualizar os dados do usuário especificado")
     }
     
     delete(id) {
         const sql = "DELETE FROM tabela_usuarios WHERE id=?;"
-        return new Promise((resolve, reject) => {
-            conexao.query(sql, id, (erro, resultado) => {
-                if(erro) return reject("Não foi possível excluir")
-                const row = JSON.parse(JSON.stringify(resultado))
-                return resolve(row)
-            })
-        })
+        return consulta(sql, id, "Não foi possível excluir os dados do usuário especificado")
     }
 
 }
