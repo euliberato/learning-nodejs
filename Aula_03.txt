@@ -1,2 +1,0 @@
-Criando rotas GET na aplicação express,
-refatoração de código e extensão json viewer.
