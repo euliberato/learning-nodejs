@@ -1,4 +1,4 @@
-import UsuarioRepository from "../repositories/UsuarioRepository.js"
+import UsuarioRepository from '../repositories/UsuarioRepository.js'
 
 class UsuarioController {
 
